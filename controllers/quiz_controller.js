@@ -23,6 +23,25 @@ exports.index = function(req, res) {
   ).catch(function(error) { next(error);})
 };
 
+// GET /quizes
+exports.index = function (req, res) {
+  models.Quiz.findAll(
+    {
+      where : (
+        (
+          (req.query.search) && (req.query.search !== '')
+        )
+          ? [ "pregunta like ?" , '%' + req.query.search + '%' ]
+          : null
+      )
+    }
+  ).then(
+    function(quizes) {
+      res.render('quizes/index' , { quizes : quizes });
+    }
+  ).catch(function(error) { next(error);});
+}
+
 
 
 // GET /quizes/:id
